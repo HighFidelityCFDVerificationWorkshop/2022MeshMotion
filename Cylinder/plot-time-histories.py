@@ -289,6 +289,120 @@ for imotion,motion in zip(range(len(UM_motions)),UM_motions):
                     ax_M4_9.plot(um_x,um_Wint,'y--',linewidth=1.0,label='UMich')
 
 
+
+# KU Cases 
+KU_motions = ['M1', 'M2']
+KU_physics = ['Re10']
+
+for imotion,motion in zip(range(len(KU_motions)),KU_motions):
+    for iphysic,physic in zip(range(len(KU_physics)),KU_physics):
+
+        if motion == "M1":
+            ku_file = 'KU/p3_translational_implicit.txt'
+        elif motion == "M2":
+            ku_file = 'KU/p3_rotational_implicit.txt'
+        else:
+            print("KU: Other motions not provided.")
+
+
+        # Load data
+        if (os.path.isfile(ku_file)):
+            ku_data = np.loadtxt(ku_file,delimiter=',')
+        else:
+            print('KU data not found!')
+            ku_data = False
+    
+        # Reported data includes initial and final time
+        #   t0 --- t1 --- t2 --- t3
+        #
+        #   nt     = 4
+        #   nsteps = 3
+        #   
+        if ( isinstance(ku_data, np.ndarray) ):
+            # University of Michigan Data
+            ku_Fx   = ku_data[:,1]
+            ku_Fy   = ku_data[:,2]
+            ku_Wint = ku_data[:,3]
+            
+            ku_nx = len(ku_Fy)
+            xend    = 2.
+            ku_dx = 2./(ku_nx-1)
+            ku_x  = np.linspace(0.,xend,ku_nx)
+            
+        
+            if (motion == 'M1'):
+                if (physic == 'Euler'):
+                    ax_M1_1.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M1_2.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M1_3.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re1000'):
+                    ax_M1_4.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M1_5.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M1_6.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re10'):
+                    ax_M1_7.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M1_8.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M1_9.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+
+            elif (motion == 'M2'):
+                if (physic == 'Euler'):
+                    ax_M2_1.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M2_2.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M2_3.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re1000'):
+                    ax_M2_4.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M2_5.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M2_6.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re10'):
+                    ax_M2_7.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M2_8.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M2_9.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+
+            elif (motion == 'M3'):
+                if (physic == 'Euler'):
+                    ax_M3_1.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M3_2.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M3_3.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re1000'):
+                    ax_M3_4.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M3_5.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M3_6.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re10'):
+                    ax_M3_7.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M3_8.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M3_9.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+
+            elif (motion == 'M4'):
+                if (physic == 'Euler'):
+                    ax_M4_1.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M4_2.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M4_3.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re1000'):
+                    ax_M4_4.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M4_5.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M4_6.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+                elif (physic == 'Re10'):
+                    ax_M4_7.plot(ku_x,ku_Fx,  'r--',linewidth=1.0,label='KU')
+                    ax_M4_8.plot(ku_x,ku_Fy,  'r--',linewidth=1.0,label='KU')
+                    ax_M4_9.plot(ku_x,ku_Wint,'r--',linewidth=1.0,label='KU')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 #        if (group == 'ucb'):
 #            if (case == 'case1'):
@@ -569,10 +683,10 @@ ax_M4_9.set_ylim((-1.5,2.0))
 
 
 
-#case1.savefig('case1_re10.png', bbox_inches='tight', dpi=800)
-#case2.savefig('case2_re10.png', bbox_inches='tight', dpi=800)
-#case3.savefig('case3_re10.png', bbox_inches='tight', dpi=800)
-#case4.savefig('case4_re10.png', bbox_inches='tight', dpi=800)
+M1.savefig('Motion1_TimeHistories.png', bbox_inches='tight', dpi=800)
+M2.savefig('Motion2_TimeHistories.png', bbox_inches='tight', dpi=800)
+M3.savefig('Motion3_TimeHistories.png', bbox_inches='tight', dpi=800)
+M4.savefig('Motion4_TimeHistories.png', bbox_inches='tight', dpi=800)
 
 plt.show()
 
