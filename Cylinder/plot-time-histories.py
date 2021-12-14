@@ -292,15 +292,23 @@ for imotion,motion in zip(range(len(UM_motions)),UM_motions):
 
 # KU Cases 
 KU_motions = ['M1', 'M2']
-KU_physics = ['Re10']
+KU_physics = ['Euler','Re10']
 
 for imotion,motion in zip(range(len(KU_motions)),KU_motions):
     for iphysic,physic in zip(range(len(KU_physics)),KU_physics):
 
         if motion == "M1":
-            ku_file = 'KU/p3_translational_implicit.txt'
+            if physic == 'Re10':
+                ku_file = 'KU/p3_translational_implicit.txt'
+            elif physic == 'Euler':
+                ku_file = 'KU/p3_translational_Euler_implicit.txt'
+
         elif motion == "M2":
-            ku_file = 'KU/p3_rotational_implicit.txt'
+            if physic == 'Re10':
+                ku_file = 'KU/p3_rotational_implicit.txt'
+            elif physic == 'Euler':
+                ku_file = 'KU/p3_rotational_Euler_implicit.txt'
+
         else:
             print("KU: Other motions not provided.")
 
