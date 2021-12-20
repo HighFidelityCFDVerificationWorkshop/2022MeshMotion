@@ -408,6 +408,119 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
 
 
 
+# US Cases 
+US_motions = ['M1', 'M2', 'M3', 'M4']
+US_physics = ['Re1000']
+
+for imotion,motion in zip(range(len(US_motions)),US_motions):
+    for iphysic,physic in zip(range(len(US_physics)),US_physics):
+
+        if motion == "M1":
+            if physic == 'Re1000':
+                us_file = 'US/forces_T_DB4.dat'
+
+        elif motion == "M2":
+            if physic == 'Re1000':
+                us_file = 'US/forces_R_DB4.dat'
+
+        elif motion == "M3":
+            if physic == 'Re1000':
+                us_file = 'US/forces_D1_DB4.dat'
+
+        elif motion == "M4":
+            if physic == 'Re1000':
+                us_file = 'US/forces_D2_DB4.dat'
+
+        else:
+            print("US: Other motions not provided.")
+
+
+        # Load data
+        if (os.path.isfile(us_file)):
+            us_data = np.loadtxt(us_file)
+        else:
+            print('US data not found!')
+            us_data = False
+    
+        # Reported data does NOT include initial time. 
+        #   Missing --- t1 --- t2 --- ... --- t_end
+        #
+        if ( isinstance(us_data, np.ndarray) ):
+
+            # Insert info for t=0
+            us_data = np.append([[0., 0., 0., 0., 0.]],us_data,axis=0)
+
+
+            # University of Strasbourg data
+            us_t    = us_data[:,1]
+
+            # Seem to be switched
+            us_Fx   = us_data[:,3]
+            us_Fy   = us_data[:,2]
+            #us_Wint  # Not provided
+            
+            us_nx = len(us_Fy)
+            xend    = 2.
+            us_dx = 2./(us_nx-1)
+            us_x  = np.linspace(0.,xend,us_nx)
+            
+            color = 'c--'
+        
+            if (motion == 'M1'):
+                if (physic == 'Euler'):
+                    ax_M1_1.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M1_2.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M1_3.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re1000'):
+                    ax_M1_4.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M1_5.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M1_6.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re10'):
+                    ax_M1_7.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M1_8.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M1_9.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+
+            elif (motion == 'M2'):
+                if (physic == 'Euler'):
+                    ax_M2_1.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M2_2.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M2_3.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re1000'):
+                    ax_M2_4.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M2_5.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M2_6.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re10'):
+                    ax_M2_7.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M2_8.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M2_9.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+
+            elif (motion == 'M3'):
+                if (physic == 'Euler'):
+                    ax_M3_1.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M3_2.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M3_3.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re1000'):
+                    ax_M3_4.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M3_5.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M3_6.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re10'):
+                    ax_M3_7.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M3_8.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M3_9.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+
+            elif (motion == 'M4'):
+                if (physic == 'Euler'):
+                    ax_M4_1.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M4_2.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M4_3.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re1000'):
+                    ax_M4_4.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M4_5.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M4_6.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
+                elif (physic == 'Re10'):
+                    ax_M4_7.plot(us_t,us_Fx,  color,linewidth=1.0,label='US')
+                    ax_M4_8.plot(us_t,us_Fy,  color,linewidth=1.0,label='US')
+                    #ax_M4_9.plot(us_t,us_Wint,'r--',linewidth=1.0,label='US')
 
 
 
@@ -712,10 +825,10 @@ ax_M4_9.set_ylim((-1.5,2.0))
 
 
 
-M1.savefig('Motion1_TimeHistories.png', bbox_inches='tight', dpi=800)
-M2.savefig('Motion2_TimeHistories.png', bbox_inches='tight', dpi=800)
-M3.savefig('Motion3_TimeHistories.png', bbox_inches='tight', dpi=800)
-M4.savefig('Motion4_TimeHistories.png', bbox_inches='tight', dpi=800)
+M1.savefig('Motion1_Cylinder_Histories.png', bbox_inches='tight', dpi=800)
+M2.savefig('Motion2_Cylinder_Histories.png', bbox_inches='tight', dpi=800)
+M3.savefig('Motion3_Cylinder_Histories.png', bbox_inches='tight', dpi=800)
+M4.savefig('Motion4_Cylinder_Histories.png', bbox_inches='tight', dpi=800)
 
 plt.show()
 

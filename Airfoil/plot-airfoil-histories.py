@@ -210,51 +210,97 @@ for imotion,motion in zip(range(len(UM_motions)),UM_motions):
 
 
 
-# KU Cases 
-KU_motions = ['M1', 'M2']
+# ku cases 
+ku_motions = ['M1', 'M2']
 
-for imotion,motion in zip(range(len(KU_motions)),KU_motions):
+for imotion,motion in zip(range(len(ku_motions)),ku_motions):
 
     if motion == "M1":
-        ku_file = 'KU/p2_translational.txt'
+        ku_file = 'ku/p2_translational.txt'
 
     elif motion == "M2":
-        ku_file = 'KU/p2_translationalPlusRotational.txt'
+        ku_file = 'ku/p2_translationalplusrotational.txt'
 
 
-    # Load data
+    # load data
     if (os.path.isfile(ku_file)):
         ku_data = np.loadtxt(ku_file,delimiter=',')
     else:
-        print('KU data not found!')
-        ku_data = False
+        print('ku data not found!')
+        ku_data = false
 
-    # Reported data does NOT include initial time. 
-    #   Missing --- t1 --- t2 --- ... --- t_end
+    # reported data does not include initial time. 
+    #   missing --- t1 --- t2 --- ... --- t_end
     #
     if ( isinstance(ku_data, np.ndarray) ):
 
-        # Insert info for t=0
+        # insert info for t=0
         ku_data = np.append([[0., 0., 0., 0.]],ku_data,axis=0)
 
-        # University of Kansas Data
+        # university of kansas data
         ku_t    = ku_data[:,0]
-        ku_Fx   = ku_data[:,1]
-        ku_Fy   = ku_data[:,2]
-        ku_Wint = ku_data[:,3]
+        ku_fx   = ku_data[:,1]
+        ku_fy   = ku_data[:,2]
+        ku_wint = ku_data[:,3]
     
         if (motion == 'M1'):
-            ax_M1_1.plot(ku_t,ku_Fx,  'r--',linewidth=1.0,label='KU')
-            ax_M1_2.plot(ku_t,ku_Fy,  'r--',linewidth=1.0,label='KU')
-            ax_M1_3.plot(ku_t,ku_Wint,'r--',linewidth=1.0,label='KU')
+            ax_M1_1.plot(ku_t,ku_fx,  'r--',linewidth=1.0,label='KU')
+            ax_M1_2.plot(ku_t,ku_fy,  'r--',linewidth=1.0,label='KU')
+            ax_M1_3.plot(ku_t,ku_wint,'r--',linewidth=1.0,label='KU')
 
         elif (motion == 'M2'):
-            ax_M2_1.plot(ku_t,ku_Fx,  'r--',linewidth=1.0,label='KU')
-            ax_M2_2.plot(ku_t,ku_Fy,  'r--',linewidth=1.0,label='KU')
-            ax_M2_3.plot(ku_t,ku_Wint,'r--',linewidth=1.0,label='KU')
+            ax_M2_1.plot(ku_t,ku_fx,  'r--',linewidth=1.0,label='KU')
+            ax_M2_2.plot(ku_t,ku_fy,  'r--',linewidth=1.0,label='KU')
+            ax_M2_3.plot(ku_t,ku_wint,'r--',linewidth=1.0,label='KU')
 
 
 
+
+
+# U. of Strasbourg cases 
+us_motions = ['M1', 'M2']
+
+for imotion,motion in zip(range(len(us_motions)),us_motions):
+
+    if motion == "M1":
+        us_file = 'US/forces_T_DB3.dat'
+
+    elif motion == "M2":
+        us_file = 'US/forces_TR_DB3.dat'
+
+
+    # load data
+    if (os.path.isfile(us_file)):
+        us_data = np.loadtxt(us_file)
+    else:
+        print('us data not found!')
+        us_data = false
+
+    # reported data does not include initial time. 
+    #   missing --- t1 --- t2 --- ... --- t_end
+    #
+    if ( isinstance(us_data, np.ndarray) ):
+
+        # insert info for t=0
+        us_data = np.append([[0., 0., 0., 0., 0.]],us_data,axis=0)
+
+        # university of kansas data
+        us_t    = us_data[:,1]
+
+        us_fx   = us_data[:,3]
+        us_fy   = us_data[:,2]
+        #us_wint = us_data[:,3]
+
+        color = 'c--'
+        if (motion == 'M1'):
+            ax_M1_1.plot(us_t,us_fx,  color,linewidth=1.0,label='US')
+            ax_M1_2.plot(us_t,us_fy,  color,linewidth=1.0,label='US')
+            #ax_M1_3.plot(us_t,us_wint,color,linewidth=1.0,label='US')
+
+        elif (motion == 'M2'):
+            ax_M2_1.plot(us_t,us_fx,color,linewidth=1.0,label='US')
+            ax_M2_2.plot(us_t,us_fy,color,linewidth=1.0,label='US')
+            #ax_M2_3.plot(us_t,us_wint,color,linewidth=1.0,label='US')
 
 
 
