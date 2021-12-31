@@ -4,3 +4,5 @@ Column - 3: Force-Y
 Column - 4: Power 
 
 Reynolds Number : 10
+
+Cylinder Grid Size : 352 Elements

@@ -4,3 +4,5 @@ Column - 3: Force-Y
 Column - 4: Power 
 
 Reynolds Number: 1000
+
+Airfoil Grid Size : 16861 Elements

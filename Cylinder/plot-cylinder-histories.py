@@ -296,8 +296,8 @@ for imotion,motion in zip(range(len(UM_motions)),UM_motions):
 
 
 # KU Cases 
-KU_motions = ['M1', 'M2']
-KU_physics = ['Euler','Re10']
+KU_motions = ['M1', 'M2', 'M3', 'M4']
+KU_physics = ['Euler','Re10', 'Re1000']
 
 for imotion,motion in zip(range(len(KU_motions)),KU_motions):
     for iphysic,physic in zip(range(len(KU_physics)),KU_physics):
@@ -307,12 +307,32 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
                 ku_file = 'KU/p3_translational_implicit.txt'
             elif physic == 'Euler':
                 ku_file = 'KU/p3_translational_Euler_implicit.txt'
+            else:
+                ku_file = False
 
         elif motion == "M2":
             if physic == 'Re10':
                 ku_file = 'KU/p3_rotational_implicit.txt'
             elif physic == 'Euler':
                 ku_file = 'KU/p3_rotational_Euler_implicit.txt'
+            else:
+                ku_file = False
+
+        elif motion == "M3":
+            if physic == 'Re10':
+                ku_file = 'KU/motion3_Re10_p3.dat'
+            elif physic == 'Euler':
+                ku_file = 'KU/motion3_Euler_p3.dat'
+            elif physic == 'Re1000':
+                ku_file = 'KU/motion3_Re1000_p3.dat'
+
+        elif motion == "M4":
+            if physic == 'Re10':
+                ku_file = 'KU/motion4_Re10_p3.dat'
+            elif physic == 'Euler':
+                ku_file = 'KU/motion4_Euler_p3.dat'
+            elif physic == 'Re1000':
+                ku_file = 'KU/motion4_Re1000_p4_quad.dat'
 
         else:
             print("KU: Other motions not provided.")
@@ -320,7 +340,10 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
 
         # Load data
         if (os.path.isfile(ku_file)):
-            ku_data = np.loadtxt(ku_file,delimiter=',')
+            if motion == "M1" or motion == "M2":
+                ku_data = np.loadtxt(ku_file,delimiter=',')
+            else:
+                ku_data = np.loadtxt(ku_file)
         else:
             print('KU data not found!')
             ku_data = False
@@ -417,19 +440,19 @@ for imotion,motion in zip(range(len(US_motions)),US_motions):
 
         if motion == "M1":
             if physic == 'Re1000':
-                us_file = 'US/forces_T_DB4.dat'
+                us_file = 'US/forces_T_dt4.dat'
 
         elif motion == "M2":
             if physic == 'Re1000':
-                us_file = 'US/forces_R_DB4.dat'
+                us_file = 'US/forces_R_dt4.dat'
 
         elif motion == "M3":
             if physic == 'Re1000':
-                us_file = 'US/forces_D1_DB4.dat'
+                us_file = 'US/forces_D1_dt4.dat'
 
         elif motion == "M4":
             if physic == 'Re1000':
-                us_file = 'US/forces_D2_DB4.dat'
+                us_file = 'US/forces_D2_dt4.dat'
 
         else:
             print("US: Other motions not provided.")

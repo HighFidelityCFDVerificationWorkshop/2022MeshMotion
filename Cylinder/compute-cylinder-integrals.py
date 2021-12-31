@@ -4,9 +4,12 @@ import scipy.integrate as integrate
 import scipy.fftpack   as fftpack
 import os.path
 
+case_motions = ['M1', 'M2', 'M3', 'M4']
+case_physics = ['ReInf','Re1000','Re10']
+
 # AFRL Cases 
-afrl_motions = ['M1', 'M2', 'M3', 'M4']
-afrl_physics = ['ReInf','Re1000','Re10']
+#afrl_motions = ['M1', 'M2', 'M3', 'M4']
+#afrl_physics = ['ReInf','Re1000','Re10']
 
 # Storage (motions,physics)
 afrl_xI = np.zeros((4,3))
@@ -15,8 +18,8 @@ afrl_zI = np.zeros((4,3))
 afrl_W  = np.zeros((4,3))
 afrl_m  = np.zeros((4,3))
 
-for imotion,motion in zip(range(len(afrl_motions)),afrl_motions):
-    for iphysic,physic in zip(range(len(afrl_physics)),afrl_physics):
+for imotion,motion in zip(range(len(case_motions)),case_motions):
+    for iphysic,physic in zip(range(len(case_physics)),case_physics):
 
         if physic == 'Re10':
             motion1_truth = ['h2','p3','0.01']
@@ -169,9 +172,50 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
             ku_file = False
 
 
+
+        if motion == "M1":
+            if physic == 'Re10':
+                ku_file = 'KU/p3_translational_implicit.txt'
+            elif physic == 'ReInf':
+                ku_file = 'KU/p3_translational_Euler_implicit.txt'
+            else:
+                ku_file = False
+
+        elif motion == "M2":
+            if physic == 'Re10':
+                ku_file = 'KU/p3_rotational_implicit.txt'
+            elif physic == 'ReInf':
+                ku_file = 'KU/p3_rotational_Euler_implicit.txt'
+            else:
+                ku_file = False
+
+        elif motion == "M3":
+            if physic == 'Re10':
+                ku_file = 'KU/motion3_Re10_p3.dat'
+            elif physic == 'ReInf':
+                ku_file = 'KU/motion3_Euler_p3.dat'
+            elif physic == 'Re1000':
+                ku_file = 'KU/motion3_Re1000_p3.dat'
+
+        elif motion == "M4":
+            if physic == 'Re10':
+                ku_file = 'KU/motion4_Re10_p3.dat'
+            elif physic == 'ReInf':
+                ku_file = 'KU/motion4_Euler_p3.dat'
+            elif physic == 'Re1000':
+                ku_file = 'KU/motion4_Re1000_p4_quad.dat'
+
+        else:
+            ku_file = False
+
+
+
         # Load data
         if (os.path.isfile(ku_file)):
-            ku_data = np.loadtxt(ku_file,delimiter=',')
+            if motion == "M1" or motion == "M2":
+                ku_data = np.loadtxt(ku_file,delimiter=',')
+            else:
+                ku_data = np.loadtxt(ku_file)
         else:
             ku_data = False
     
@@ -199,17 +243,103 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
 
 
 
+# US Cases 
+US_motions = ['M1', 'M2', 'M3', 'M4']
+US_physics = ['Re1000']
+
+# Storage (motions,physics)
+US_xI = np.zeros((4,3))
+US_yI = np.zeros((4,3))
+US_zI = np.zeros((4,3))
+US_W  = np.zeros((4,3))
+US_m  = np.zeros((4,3))
+
+for imotion,motion in zip(range(len(case_motions)),case_motions):
+    for iphysic,physic in zip(range(len(case_physics)),case_physics):
+
+        if motion == "M1":
+            if physic == 'Re1000':
+                us_file = 'US/forces_T_dt4.dat'
+            else:
+                us_file = False
+
+        elif motion == "M2":
+            if physic == 'Re1000':
+                us_file = 'US/forces_R_dt4.dat'
+            else:
+                us_file = False
+
+        elif motion == "M3":
+            if physic == 'Re1000':
+                us_file = 'US/forces_D1_dt4.dat'
+            else:
+                us_file = False
+
+        elif motion == "M4":
+            if physic == 'Re1000':
+                us_file = 'US/forces_D2_dt4.dat'
+            else:
+                us_file = False
+
+        else:
+            us_file = False
+            print("US: Other motions not provided.")
+
+
+        # Load data
+        if (os.path.isfile(us_file)):
+            us_data = np.loadtxt(us_file)
+        else:
+            print('US data not found!')
+            us_data = False
+    
+        # Reported data does NOT include initial time. 
+        #   Missing --- t1 --- t2 --- ... --- t_end
+        #
+        if ( isinstance(us_data, np.ndarray) ):
+
+            # Insert info for t=0
+            us_data = np.append([[0., 0., 0., 0., 0.]],us_data,axis=0)
+
+
+            # University of Strasbourg data
+            us_t    = us_data[:,1]
+
+            # Seem to be switched
+            us_Fx   = us_data[:,3]
+            us_Fy   = us_data[:,2]
+            #us_Wint  # Not provided
+            
+            us_nx = len(us_Fy)
+            xend    = 2.
+            us_dx = 2./(us_nx-1)
+            us_x  = np.linspace(0.,xend,us_nx)
+            
+
+            US_xI[imotion,iphysic] = integrate.simps(us_Fx,  x=us_t)
+            US_yI[imotion,iphysic] = integrate.simps(us_Fy,  x=us_t)
+            #US_W[ imotion,iphysic] = integrate.simps(us_Wint,x=us_t)
+
+
+
+
+
+
+
+
+
 
 print(" ")
 print("Org.  ", "X-Impulse", "Y-Impulse", "Work")
-for imotion,motion in zip(range(len(afrl_motions)),afrl_motions):
+for imotion,motion in zip(range(len(case_motions)),case_motions):
     print("---------------------------------------------------------------- ")
-    for iphysic,physic in zip(range(len(afrl_physics)),afrl_physics):
+    for iphysic,physic in zip(range(len(case_physics)),case_physics):
         print(" ")
         print(motion, physic)
         print("AFRL:  ", afrl_xI[imotion,iphysic], afrl_yI[imotion,iphysic], afrl_W[imotion,iphysic])
         print("UMich: ",   UM_xI[imotion,iphysic],   UM_yI[imotion,iphysic],   UM_W[imotion,iphysic])
         print("KU:    ",   KU_xI[imotion,iphysic],   KU_yI[imotion,iphysic],   KU_W[imotion,iphysic])
+        print("US:    ",   US_xI[imotion,iphysic],   US_yI[imotion,iphysic],    'N/A')
 
 
 
