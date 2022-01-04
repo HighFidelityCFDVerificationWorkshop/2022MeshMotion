@@ -550,84 +550,99 @@ for imotion,motion in zip(range(len(US_motions)),US_motions):
 
 
 
+# UCB Cases 
+UCB_motions = ['M1', 'M2', 'M3', 'M4']
+UCB_physics = ['Re10','Re1000','ReInf']
+
+for imotion,motion in zip(range(len(UCB_motions)),UCB_motions):
+    for iphysic,physic in zip(range(len(UCB_physics)),UCB_physics):
+
+        ucb_file = 'UCB/'+motion+physic+'_ref3p3.dat'
+
+        # Load data
+        if (os.path.isfile(ucb_file)):
+            ucb_data = np.loadtxt(ucb_file, skiprows=1)
+        else:
+            print(ucb_file)
+            print('UCB data not found!')
+            ucb_data = False
+    
+        # Reported data includes initial and final time
+        #   t0 --- t1 --- t2 --- t3
+        #
+        #   nt     = 4
+        #   nsteps = 3
+        #   
+        if ( isinstance(ucb_data, np.ndarray) ):
+            # U.C. Berkeley Data
+            ucb_x    = ucb_data[:,0]
+            ucb_Fx   = ucb_data[:,1]
+            ucb_Fy   = ucb_data[:,2]
+            ucb_Wint = ucb_data[:,3]
+            
+            #ucb_nx = len(ucb_Fy)
+            #xend    = 2.
+            #ucb_dx = 2./(ucb_nx-1)
+            #ucb_x  = np.linspace(0.,xend,ucb_nx)
+            
+        
+            if (motion == 'M1'):
+                if (physic == 'ReInf'):
+                    ax_M1_1.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M1_2.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M1_3.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re1000'):
+                    ax_M1_4.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M1_5.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M1_6.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re10'):
+                    ax_M1_7.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M1_8.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M1_9.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+
+            elif (motion == 'M2'):
+                if (physic == 'ReInf'):
+                    ax_M2_1.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M2_2.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M2_3.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re1000'):
+                    ax_M2_4.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M2_5.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M2_6.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re10'):
+                    ax_M2_7.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M2_8.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M2_9.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+
+            elif (motion == 'M3'):
+                if (physic == 'ReInf'):
+                    ax_M3_1.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M3_2.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M3_3.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re1000'):
+                    ax_M3_4.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M3_5.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M3_6.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re10'):
+                    ax_M3_7.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M3_8.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M3_9.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+
+            elif (motion == 'M4'):
+                if (physic == 'ReInf'):
+                    ax_M4_1.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M4_2.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M4_3.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re1000'):
+                    ax_M4_4.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M4_5.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M4_6.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
+                elif (physic == 'Re10'):
+                    ax_M4_7.plot(ucb_x,ucb_Fx,  'g--',linewidth=1.0,label='UCB')
+                    ax_M4_8.plot(ucb_x,ucb_Fy,  'g--',linewidth=1.0,label='UCB')
+                    ax_M4_9.plot(ucb_x,ucb_Wint,'g--',linewidth=1.0,label='UCB')
 
 
-
-
-
-
-
-
-
-
-#
-#        if (group == 'ucb'):
-#            if (case == 'case1'):
-#                ucb_file = 'external/ucb/w1_2330020_Re10_case1_forces.dat'
-#            elif (case == 'case2'):
-#                ucb_file = 'no-file'
-#            elif (case == 'case3'):
-#                ucb_file = 'no-file'
-#            elif (case == 'case4'):
-#                ucb_file = 'no-file'
-#
-#
-#            # Load data
-#            if (os.path.isfile(ucb_file)):
-#                ucb_data = np.loadtxt(ucb_file, skiprows=1)
-#            else:
-#                ucb_data = False
-#
-#            #print(type(ucb_data))
-#            #print(ucb_data.shape)
-#        
-#            # Reported data does NOT include initial time, but does
-#            # include final time
-#            #   Missing --- t1 --- t2 --- t3
-#            #
-#            if ( isinstance(ucb_data, np.ndarray) ):
-#
-#                ucb_data = np.append([[0., 0., 0., 0., 0.]],ucb_data,axis=0)
-#
-#                # UC Berkeley Data
-#                ucb_Fx   = ucb_data[:,1]
-#                ucb_Fy   = ucb_data[:,2]
-#                ucb_Wint = ucb_data[:,4]
-#                
-#                ucb_nx = len(ucb_Fy)
-#                xend    = 2.
-#                ucb_dx = 2./(ucb_nx-1)
-#                ucb_x  = np.linspace(0.,xend,ucb_nx)
-#
-#                ucb_integrated_Fx = integrate.simps(ucb_Fx,   dx=ucb_dx)
-#                ucb_integrated_Fy = integrate.simps(ucb_Fy,   dx=ucb_dx)
-#                ucb_integrated_W  = integrate.simps(ucb_Wint, dx=ucb_dx)
-#                #ucb_integrated_Fx = integrate.romb(ucb_Fx,   dx=ucb_dx)
-#                #ucb_integrated_Fy = integrate.romb(ucb_Fy,   dx=ucb_dx)
-#                #ucb_integrated_W  = integrate.romb(ucb_Wint, dx=ucb_dx)
-#
-#                if (motion == 'M1'):
-#                    ax_c1_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c1_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c1_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
-#                elif (motion == 'M2'):
-#                    ax_c2_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c2_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c2_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
-#                elif (motion == 'M3'):
-#                    ax_c3_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c3_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c3_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
-#                elif (motion== 'M4'):
-#                    ax_c4_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c4_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c4_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
-#
-#    print("(Case, Re): ", " (", case, ",", re_number, ")")
-#    print("Org, Fx, Fy, W, mass")
-#    print("AFRL:", afrl_integrated_Fx, afrl_integrated_Fy, afrl_integrated_W, afrl_integrated_mass)
-#    print("UM:",   um_integrated_Fx,   um_integrated_Fy,   um_integrated_W  )
-#    print("UCB:",  ucb_integrated_Fx,  ucb_integrated_Fy,  ucb_integrated_W )
 
 
 ax_M1_1.legend()
