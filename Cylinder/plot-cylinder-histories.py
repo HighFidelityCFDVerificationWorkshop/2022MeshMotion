@@ -304,19 +304,19 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
 
         if motion == "M1":
             if physic == 'Re10':
-                ku_file = 'KU/p3_translational_implicit.txt'
+                ku_file = 'KU/update_20211231/Re10_Motion1.txt'
             elif physic == 'Euler':
-                ku_file = 'KU/p3_translational_Euler_implicit.txt'
-            else:
-                ku_file = False
+                ku_file = 'KU/update_20211231/Euler_Motion1.txt'
+            elif physic == 'Re1000':
+                ku_file = 'KU/update_20211231/Re1000_Motion1.txt'
 
         elif motion == "M2":
             if physic == 'Re10':
-                ku_file = 'KU/p3_rotational_implicit.txt'
+                ku_file = 'KU/update_20211231/Re10_Motion2.txt'
             elif physic == 'Euler':
-                ku_file = 'KU/p3_rotational_Euler_implicit.txt'
-            else:
-                ku_file = False
+                ku_file = 'KU/update_20211231/Euler_Motion2.txt'
+            elif physic == 'Re1000':
+                ku_file = 'KU/update_20211231/Re1000_Motion2.txt'
 
         elif motion == "M3":
             if physic == 'Re10':
@@ -349,7 +349,7 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
             ku_data = False
     
         # Reported data does NOT include initial time. Additionally, final
-        # time is duplicated.
+        # time is duplicated in some cases.
         #   Missing --- t1 --- t2 --- ... --- t_end --- t_end
         #
         if ( isinstance(ku_data, np.ndarray) ):
@@ -358,7 +358,9 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
             ku_data = np.append([[0., 0., 0., 0.]],ku_data,axis=0)
 
             # Remove duplicate entry for t_end
-            ku_data = np.delete(ku_data, -1, axis=0)
+            if ku_data[-1,0] == ku_data[-2,0]:
+                print("KU: Removing duplicated final time")
+                ku_data = np.delete(ku_data, -1, axis=0)
 
             # University of Kansas data
             ku_t    = ku_data[:,0]
