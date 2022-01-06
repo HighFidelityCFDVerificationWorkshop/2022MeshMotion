@@ -143,10 +143,10 @@ ku_motions = ['M1', 'M2']
 for imotion,motion in zip(range(len(ku_motions)),ku_motions):
 
     if motion == "M1":
-        ku_file = 'ku/p2_translational.txt'
+        ku_file = 'KU/update_20211231/Re1000_Motion1.txt'
 
     elif motion == "M2":
-        ku_file = 'ku/p2_translationalplusrotational.txt'
+        ku_file = 'KU/update_20211231/Re1000_Motion2.txt'
 
 
     # load data
@@ -164,7 +164,12 @@ for imotion,motion in zip(range(len(ku_motions)),ku_motions):
         # insert info for t=0
         ku_data = np.append([[0., 0., 0., 0.]],ku_data,axis=0)
 
-        # university of kansas data
+        # Remove duplicate entry for t_end or times greater than 2.
+        if (ku_data[-1,0] == ku_data[-2,0]) or (ku_data[-1,0] > 2.00000001):
+            print("KU: Removing duplicated final time")
+            ku_data = np.delete(ku_data, -1, axis=0)
+
+        # University of Kansas data
         ku_t    = ku_data[:,0]
         ku_fx   = ku_data[:,1]
         ku_fy   = ku_data[:,2]

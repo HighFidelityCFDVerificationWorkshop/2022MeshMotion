@@ -81,19 +81,19 @@ for imotion,motion in zip(range(len(afrl_motions)),afrl_motions):
 
 
         if physic == 'Re10':
-            motion1_truth = ['h2','p3','0.01']
-            motion2_truth = ['h2','p3','0.01']
-            motion3_truth = ['h2','p3','0.01']
-            motion4_truth = ['h2','p3','0.01']
+            motion1_truth = ['h2','p3','0.001']
+            motion2_truth = ['h2','p3','0.001']
+            motion3_truth = ['h2','p3','0.001']
+            motion4_truth = ['h2','p3','0.001']
         elif physic == 'Re1000':
-            motion1_truth = ['h2','p3','0.01']
-            motion2_truth = ['h2','p3','0.01']
-            motion3_truth = ['h2','p3','0.01']
-            motion4_truth = ['h2','p3','0.01']
+            motion1_truth = ['h2','p3','0.001']
+            motion2_truth = ['h2','p3','0.001']
+            motion3_truth = ['h2','p3','0.001']
+            motion4_truth = ['h2','p3','0.001']
         elif physic == 'ReInf':
-            motion1_truth = ['h1','p3','0.01']
-            motion2_truth = ['h2','p3','0.01']
-            motion3_truth = ['h2','p3','0.01']
+            motion1_truth = ['h1','p3','0.001']
+            motion2_truth = ['h1','p3','0.001']
+            motion3_truth = ['h1','p3','0.001']
             motion4_truth = ['h1','p3','0.001']
         else:
             print("ERROR!!!!!")
@@ -122,6 +122,7 @@ for imotion,motion in zip(range(len(afrl_motions)),afrl_motions):
         if (os.path.isfile(afrl_file)):
             afrl_data = np.loadtxt(afrl_file, skiprows=1)
         else:
+            print('Data not found: '+afrl_file)
             afrl_data = False
         
         # Reported data includes initial and final time
@@ -144,59 +145,61 @@ for imotion,motion in zip(range(len(afrl_motions)),afrl_motions):
             xend    = 2.
             afrl_dx = 2./(afrl_nx-1)
             afrl_x  = np.linspace(0.,xend,afrl_nx)
+
+            color = 'b--'
             
             if (motion == 'M1'):
                 if (physic == 'ReInf'):
-                    ax_M1_1.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M1_2.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M1_3.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M1_1.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M1_2.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M1_3.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re1000'):
-                    ax_M1_4.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M1_5.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M1_6.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M1_4.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M1_5.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M1_6.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re10'):
-                    ax_M1_7.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M1_8.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M1_9.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M1_7.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M1_8.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M1_9.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
             elif (motion == 'M2'):
                 if (physic == 'ReInf'):
-                    ax_M2_1.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M2_2.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M2_3.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M2_1.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M2_2.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M2_3.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re1000'):
-                    ax_M2_4.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M2_5.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M2_6.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M2_4.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M2_5.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M2_6.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re10'):
-                    ax_M2_7.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M2_8.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M2_9.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M2_7.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M2_8.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M2_9.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
             elif (motion == 'M3'):
                 if (physic == 'ReInf'):
-                    ax_M3_1.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M3_2.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M3_3.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M3_1.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M3_2.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M3_3.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re1000'):
-                    ax_M3_4.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M3_5.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M3_6.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M3_4.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M3_5.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M3_6.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re10'):
-                    ax_M3_7.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M3_8.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M3_9.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M3_7.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M3_8.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M3_9.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
             elif (motion == 'M4'):
                 if (physic == 'ReInf'):
-                    ax_M4_1.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M4_2.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M4_3.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M4_1.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M4_2.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M4_3.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re1000'):
-                    ax_M4_4.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M4_5.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M4_6.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M4_4.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M4_5.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M4_6.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
                 elif (physic == 'Re10'):
-                    ax_M4_7.plot(afrl_x,afrl_Fx,  'b',linewidth=1.0,label='AFRL')
-                    ax_M4_8.plot(afrl_x,afrl_Fy,  'b',linewidth=1.0,label='AFRL')
-                    ax_M4_9.plot(afrl_x,afrl_Wint,'b',linewidth=1.0,label='AFRL')
+                    ax_M4_7.plot(afrl_x,afrl_Fx,  color,linewidth=1.0,label='AFRL')
+                    ax_M4_8.plot(afrl_x,afrl_Fy,  color,linewidth=1.0,label='AFRL')
+                    ax_M4_9.plot(afrl_x,afrl_Wint,color,linewidth=1.0,label='AFRL')
 
 
 
@@ -357,8 +360,8 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
             # Insert info for t=0
             ku_data = np.append([[0., 0., 0., 0.]],ku_data,axis=0)
 
-            # Remove duplicate entry for t_end
-            if ku_data[-1,0] == ku_data[-2,0]:
+            # Remove duplicate entry for t_end or times greater than 2.
+            if (ku_data[-1,0] == ku_data[-2,0]) or (ku_data[-1,0] > 2.00000001):
                 print("KU: Removing duplicated final time")
                 ku_data = np.delete(ku_data, -1, axis=0)
 

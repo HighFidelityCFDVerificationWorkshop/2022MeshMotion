@@ -22,15 +22,15 @@ for imotion,motion in zip(range(len(case_motions)),case_motions):
     for iphysic,physic in zip(range(len(case_physics)),case_physics):
 
         if physic == 'Re10':
-            motion1_truth = ['h2','p3','0.01']
-            motion2_truth = ['h2','p3','0.01']
-            motion3_truth = ['h2','p3','0.01']
-            motion4_truth = ['h2','p3','0.01']
+            motion1_truth = ['h2','p3','0.001']
+            motion2_truth = ['h2','p3','0.001']
+            motion3_truth = ['h2','p3','0.001']
+            motion4_truth = ['h2','p3','0.001']
         elif physic == 'Re1000':
-            motion1_truth = ['h2','p3','0.01']
-            motion2_truth = ['h2','p3','0.01']
-            motion3_truth = ['h2','p3','0.01']
-            motion4_truth = ['h2','p3','0.01']
+            motion1_truth = ['h2','p3','0.001']
+            motion2_truth = ['h2','p3','0.001']
+            motion3_truth = ['h2','p3','0.001']
+            motion4_truth = ['h2','p3','0.001']
         elif physic == 'ReInf':
             motion1_truth = ['h1','p3','0.01']
             motion2_truth = ['h2','p3','0.01']
@@ -188,7 +188,6 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
             ku_file = False
 
 
-
         # Load data
         if (os.path.isfile(ku_file)):
             if motion == "M1" or motion == "M2":
@@ -198,6 +197,7 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
         else:
             ku_data = False
     
+
         # Reported data does NOT include initial time. Additionally, final
         # time is duplicated.
         #   Missing --- t1 --- t2 --- ... --- t_end --- t_end
@@ -208,8 +208,8 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
             ku_data = np.append([[0., 0., 0., 0.]],ku_data,axis=0)
 
 
-            # Remove duplicate entry for t_end
-            if ku_data[-1,0] == ku_data[-2,0]:
+            # Remove duplicate entry for t_end or times greater than 2.
+            if (ku_data[-1,0] == ku_data[-2,0]) or (ku_data[-1,0] > 2.00000001):
                 print("KU: Removing duplicated final time")
                 ku_data = np.delete(ku_data, -1, axis=0)
 
@@ -305,6 +305,59 @@ for imotion,motion in zip(range(len(case_motions)),case_motions):
 
 
 
+# UCB Cases 
+UCB_motions = ['M1', 'M2', 'M3', 'M4']
+UCB_physics = ['Re10','Re1000','ReInf']
+
+# Storage (motions,physics)
+UCB_xI = np.zeros((4,3))
+UCB_yI = np.zeros((4,3))
+UCB_zI = np.zeros((4,3))
+UCB_W  = np.zeros((4,3))
+UCB_m  = np.zeros((4,3))
+
+
+for imotion,motion in zip(range(len(case_motions)),case_motions):
+    for iphysic,physic in zip(range(len(case_physics)),case_physics):
+
+        ucb_file = 'UCB/'+motion+physic+'_ref3p3.dat'
+
+        # Load data
+        if (os.path.isfile(ucb_file)):
+            ucb_data = np.loadtxt(ucb_file, skiprows=1)
+        else:
+            print(ucb_file)
+            print('UCB data not found!')
+            ucb_data = False
+    
+        # Reported data includes initial and final time
+        #   t0 --- t1 --- t2 --- t3
+        #
+        #   nt     = 4
+        #   nsteps = 3
+        #   
+        if ( isinstance(ucb_data, np.ndarray) ):
+            # U.C. Berkeley Data
+            ucb_x    = ucb_data[:,0]
+            ucb_Fx   = ucb_data[:,1]
+            ucb_Fy   = ucb_data[:,2]
+            ucb_Wint = ucb_data[:,3]
+            
+            UCB_xI[imotion,iphysic] = integrate.simps(ucb_Fx,  x=ucb_x)
+            UCB_yI[imotion,iphysic] = integrate.simps(ucb_Fy,  x=ucb_x)
+            UCB_W[ imotion,iphysic] = integrate.simps(ucb_Wint,x=ucb_x)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -321,6 +374,7 @@ for imotion,motion in zip(range(len(case_motions)),case_motions):
         print("AFRL:  ", afrl_xI[imotion,iphysic], afrl_yI[imotion,iphysic], afrl_W[imotion,iphysic])
         print("UMich: ",   UM_xI[imotion,iphysic],   UM_yI[imotion,iphysic],   UM_W[imotion,iphysic])
         print("KU:    ",   KU_xI[imotion,iphysic],   KU_yI[imotion,iphysic],   KU_W[imotion,iphysic])
+        print("UCB:   ",  UCB_xI[imotion,iphysic],  UCB_yI[imotion,iphysic],  UCB_W[imotion,iphysic])
         print("US:    ",   US_xI[imotion,iphysic],   US_yI[imotion,iphysic],    'N/A')
 
 

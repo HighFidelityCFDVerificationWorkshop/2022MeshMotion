@@ -124,10 +124,10 @@ KU_m  = np.zeros((2))
 for imotion,motion in zip(range(len(KU_motions)),KU_motions):
 
     if motion == "M1":
-        ku_file = 'KU/p2_translational.txt'
+        ku_file = 'KU/update_20211231/Re1000_Motion1.txt'
 
     elif motion == "M2":
-        ku_file = 'KU/p2_translationalPlusRotational.txt'
+        ku_file = 'KU/update_20211231/Re1000_Motion2.txt'
 
 
     # Load data
@@ -145,6 +145,11 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
         # Insert info for t=0
         ku_data = np.append([[0., 0., 0., 0.]],ku_data,axis=0)
 
+        # Remove duplicate entry for t_end or times greater than 2.
+        if (ku_data[-1,0] == ku_data[-2,0]) or (ku_data[-1,0] > 2.00000001):
+            print("KU: Removing duplicated final time")
+            ku_data = np.delete(ku_data, -1, axis=0)
+
         # University of Kansas Data
         ku_t    = ku_data[:,0]
         ku_Fx   = ku_data[:,1]
@@ -154,6 +159,60 @@ for imotion,motion in zip(range(len(KU_motions)),KU_motions):
         KU_xI[imotion] = integrate.simps(ku_Fx,  x=ku_t)
         KU_yI[imotion] = integrate.simps(ku_Fy,  x=ku_t)
         KU_W[ imotion] = integrate.simps(ku_Wint,x=ku_t)
+
+
+
+# U. of Strasbourg cases 
+us_motions = ['M1', 'M2']
+
+# Storage (motions,physics)
+US_xI = np.zeros((2))
+US_yI = np.zeros((2))
+US_zI = np.zeros((2))
+US_W  = np.zeros((2))
+US_m  = np.zeros((2))
+
+for imotion,motion in zip(range(len(us_motions)),us_motions):
+
+    if motion == "M1":
+        us_file = 'US/forces_T_DB3.dat'
+
+    elif motion == "M2":
+        us_file = 'US/forces_TR_DB3.dat'
+
+
+    # load data
+    if (os.path.isfile(us_file)):
+        us_data = np.loadtxt(us_file)
+    else:
+        print('us data not found!')
+        us_data = false
+
+    # reported data does not include initial time. 
+    #   missing --- t1 --- t2 --- ... --- t_end
+    #
+    if ( isinstance(us_data, np.ndarray) ):
+
+        # insert info for t=0
+        us_data = np.append([[0., 0., 0., 0., 0.]],us_data,axis=0)
+
+        # university of kansas data
+        us_t    = us_data[:,1]
+
+        us_Fx   = us_data[:,3]
+        us_Fy   = us_data[:,2]
+        #us_wint = us_data[:,3]
+
+
+        US_xI[imotion] = integrate.simps(us_Fx,  x=us_t)
+        US_yI[imotion] = integrate.simps(us_Fy,  x=us_t)
+        #US_W[ imotion] = integrate.simps(us_Wint,x=us_t)
+
+
+
+
+
+
 
 
 
@@ -235,6 +294,7 @@ for imotion,motion in zip(range(len(airfoil_motions)),airfoil_motions):
     print("AFRL:  ", afrl_xI[imotion], afrl_yI[imotion], afrl_W[imotion])
     print("UMich: ",   UM_xI[imotion],   UM_yI[imotion],   UM_W[imotion])
     print("KU:    ",   KU_xI[imotion],   KU_yI[imotion],   KU_W[imotion])
+    print("US:    ",   US_xI[imotion],   US_yI[imotion],  "Not reported") 
 
 
 
