@@ -19,8 +19,8 @@ afrl_m  = np.zeros((2))
 
 for imotion,motion in zip(range(len(afrl_motions)),afrl_motions):
 
-    motion1_truth = ['h3','p3','0.01']
-    motion2_truth = ['h1','p2','0.01']
+    motion1_truth = ['h3','p2','0.01']
+    motion2_truth = ['h3','p2','0.01']
 
     if (motion == 'M1'):
         h_ref = motion1_truth[0]
