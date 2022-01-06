@@ -1,4 +1,4 @@
-#i!/usr/bin/env python3
+#!/usr/bin/env python3
 import numpy as np
 import scipy.integrate as integrate
 import scipy.fftpack   as fftpack
