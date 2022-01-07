@@ -214,74 +214,50 @@ for imotion,motion in zip(range(len(us_motions)),us_motions):
 
 
 
+# UCB Cases 
+UCB_motions    = ['M1', 'M2']
+# Storage (motions,physics)
+UCB_xI = np.zeros((2))
+UCB_yI = np.zeros((2))
+UCB_zI = np.zeros((2))
+UCB_W  = np.zeros((2))
+UCB_m  = np.zeros((2))
+
+
+for imotion,motion in zip(range(len(UCB_motions)),UCB_motions):
+
+    ucb_file = 'UCB/'+motion+'_ref2p3.dat'
+
+    # Load data
+    if (os.path.isfile(ucb_file)):
+        ucb_data = np.loadtxt(ucb_file, skiprows=1)
+    else:
+        print(ucb_file)
+        print('UCB data not found!')
+        ucb_data = False
+
+
+
+    # Reported data includes initial and final time
+    #   t0 --- t1 --- t2 --- t3
+    #
+    #   nt     = 4
+    #   nsteps = 3
+    #   
+    if ( isinstance(ucb_data, np.ndarray) ):
+        # U.C. Berkeley Data
+        ucb_t    = ucb_data[:,0]
+        ucb_Fx   = ucb_data[:,1]
+        ucb_Fy   = ucb_data[:,2]
+        ucb_Wint = ucb_data[:,3]
+
+        UCB_xI[imotion] = integrate.simps(ucb_Fx,  x=ucb_t)
+        UCB_yI[imotion] = integrate.simps(ucb_Fy,  x=ucb_t)
+        UCB_W[ imotion] = integrate.simps(ucb_Wint,x=ucb_t)
 
 
 
 
-
-
-#
-#        if (group == 'ucb'):
-#            if (case == 'case1'):
-#                ucb_file = 'external/ucb/w1_2330020_Re10_case1_forces.dat'
-#            elif (case == 'case2'):
-#                ucb_file = 'no-file'
-#            elif (case == 'case3'):
-#                ucb_file = 'no-file'
-#            elif (case == 'case4'):
-#                ucb_file = 'no-file'
-#
-#
-#            # Load data
-#            if (os.path.isfile(ucb_file)):
-#                ucb_data = np.loadtxt(ucb_file, skiprows=1)
-#            else:
-#                ucb_data = False
-#
-#            #print(type(ucb_data))
-#            #print(ucb_data.shape)
-#        
-#            # Reported data does NOT include initial time, but does
-#            # include final time
-#            #   Missing --- t1 --- t2 --- t3
-#            #
-#            if ( isinstance(ucb_data, np.ndarray) ):
-#
-#                ucb_data = np.append([[0., 0., 0., 0., 0.]],ucb_data,axis=0)
-#
-#                # UC Berkeley Data
-#                ucb_Fx   = ucb_data[:,1]
-#                ucb_Fy   = ucb_data[:,2]
-#                ucb_Wint = ucb_data[:,4]
-#                
-#                ucb_nx = len(ucb_Fy)
-#                xend    = 2.
-#                ucb_dx = 2./(ucb_nx-1)
-#                ucb_x  = np.linspace(0.,xend,ucb_nx)
-#
-#                ucb_integrated_Fx = integrate.simps(ucb_Fx,   dx=ucb_dx)
-#                ucb_integrated_Fy = integrate.simps(ucb_Fy,   dx=ucb_dx)
-#                ucb_integrated_W  = integrate.simps(ucb_Wint, dx=ucb_dx)
-#                #ucb_integrated_Fx = integrate.romb(ucb_Fx,   dx=ucb_dx)
-#                #ucb_integrated_Fy = integrate.romb(ucb_Fy,   dx=ucb_dx)
-#                #ucb_integrated_W  = integrate.romb(ucb_Wint, dx=ucb_dx)
-#
-#                if (motion == 'M1'):
-#                    ax_c1_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c1_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c1_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
-#                elif (motion == 'M2'):
-#                    ax_c2_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c2_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c2_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
-#                elif (motion == 'M3'):
-#                    ax_c3_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c3_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c3_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
-#                elif (motion== 'M4'):
-#                    ax_c4_1.plot(ucb_x,ucb_Fx,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c4_2.plot(ucb_x,ucb_Fy,  'r-.',linewidth=1.0,label='UC-Berk')
-#                    ax_c4_3.plot(ucb_x,ucb_Wint,'r-.',linewidth=1.0,label='UC-Berk')
 
 
 
@@ -294,6 +270,7 @@ for imotion,motion in zip(range(len(airfoil_motions)),airfoil_motions):
     print("AFRL:  ", afrl_xI[imotion], afrl_yI[imotion], afrl_W[imotion])
     print("UMich: ",   UM_xI[imotion],   UM_yI[imotion],   UM_W[imotion])
     print("KU:    ",   KU_xI[imotion],   KU_yI[imotion],   KU_W[imotion])
+    print("UCB:   ",  UCB_xI[imotion],  UCB_yI[imotion],  UCB_W[imotion]) 
     print("US:    ",   US_xI[imotion],   US_yI[imotion],  "Not reported") 
 
 
