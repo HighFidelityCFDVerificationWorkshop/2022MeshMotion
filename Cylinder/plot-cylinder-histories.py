@@ -583,11 +583,6 @@ for imotion,motion in zip(range(len(UCB_motions)),UCB_motions):
             ucb_Fy   = ucb_data[:,2]
             ucb_Wint = ucb_data[:,3]
             
-            #ucb_nx = len(ucb_Fy)
-            #xend    = 2.
-            #ucb_dx = 2./(ucb_nx-1)
-            #ucb_x  = np.linspace(0.,xend,ucb_nx)
-            
         
             if (motion == 'M1'):
                 if (physic == 'ReInf'):
