@@ -156,6 +156,10 @@ for imotion,motion in zip(range(len(case_motions)),case_motions):
                 ax_M2_4.semilogx(sndofs,xI[imotion,iphysic,:,iorder,itime],color,linewidth=1.0,label='UM P4')
                 ax_M2_5.semilogx(sndofs,yI[imotion,iphysic,:,iorder,itime],color,linewidth=1.0,label='UM P4')
                 ax_M2_6.semilogx(sndofs,W[ imotion,iphysic,:,iorder,itime],color,linewidth=1.0,label='UM P4')
+
+                # New: M2, Re1000
+                ax_M2_6.semilogx(sndofs[1],-1.124887156483727E-01,'go-',linewidth=1.0,label='UM NEW')
+
             elif (physic == 'Re1'):
                 ax_M2_7.semilogx(sndofs,xI[imotion,iphysic,:,iorder,itime],color,linewidth=1.0,label='UM P4')
                 ax_M2_8.semilogx(sndofs,yI[imotion,iphysic,:,iorder,itime],color,linewidth=1.0,label='UM P4')
@@ -194,7 +198,7 @@ afrl_grid_sizes     = [20, 80, 320]
 afrl_motions        = ['M1', 'M2', 'M3', 'M4']
 afrl_physics        = ['ReInf','Re1000','Re10']
 afrl_orders         = ['p1','p2','p3']
-afrl_order_integers = [1, 2, 3]
+afrl_order_integers = [1, 2, 3, 4]
 afrl_times          = ['0.1','0.01','0.001']
 
 # Storage (motions,physics,h,p,t)
@@ -321,6 +325,178 @@ for imotion,motion in zip(range(len(afrl_motions)),afrl_motions):
                 ax_M4_7.semilogx(sndofs,afrl_xI[imotion,iphysic,:,iorder,itime],color,linewidth=1.0,label='AFRL P3')
                 ax_M4_8.semilogx(sndofs,afrl_yI[imotion,iphysic,:,iorder,itime],color,linewidth=1.0,label='AFRL P3')
                 ax_M4_9.semilogx(sndofs,afrl_W[ imotion,iphysic,:,iorder,itime], color,linewidth=1.0,label='AFRL P3')
+
+
+
+
+
+
+
+
+# UCB Cases 
+case_grids          = ['ref0', 'ref1', 'ref2', 'ref3']
+case_grid_sizes     = [20, 80, 320, 1280]
+case_motions        = ['M1', 'M2', 'M3', 'M4']
+case_orders         = ['p1', 'p2', 'p3', 'p4']
+case_physics        = ['ReInf','Re1000','Re10']
+case_order_integers = [1, 2, 3, 4]
+
+# Storage (motions,physics,h,p,t)
+xI = np.zeros((len(case_motions),len(case_physics),len(case_grids),len(case_orders)))
+yI = np.zeros((len(case_motions),len(case_physics),len(case_grids),len(case_orders)))
+zI = np.zeros((len(case_motions),len(case_physics),len(case_grids),len(case_orders)))
+W  = np.zeros((len(case_motions),len(case_physics),len(case_grids),len(case_orders)))
+m  = np.zeros((len(case_motions),len(case_physics),len(case_grids),len(case_orders)))
+
+for imotion,motion in zip(range(len(case_motions)),case_motions):
+    for iphysic,physic in zip(range(len(case_physics)),case_physics):
+        for igrid,grid in zip(range(len(case_grids)),case_grids):
+            for iorder,order in zip(range(len(case_orders)),case_orders):
+
+                case_file = 'UCB/'+motion+physic+'_'+grid+order+'.dat'
+
+                # Load data
+                if (os.path.isfile(case_file)):
+                    case_data = np.loadtxt(case_file, skiprows=1)
+                else:
+                    print(case_file)
+                    print('UCB data not found!')
+                    case_data = False
+
+
+                # Reported data includes initial and final time
+                #   t0 --- t1 --- t2 --- t3
+                #
+                #   e.g.
+                #   nt     = 4
+                #   nsteps = 3
+                    
+                if ( isinstance(case_data, np.ndarray) ):
+                    # U.C. Berkeley Data
+                    case_t    = case_data[:,0]
+                    case_Fx   = case_data[:,1]
+                    case_Fy   = case_data[:,2]
+                    case_Wint = case_data[:,3]
+
+
+
+                    xI[imotion,iphysic,igrid,iorder] = integrate.simps(case_Fx,  x=case_t)
+                    yI[imotion,iphysic,igrid,iorder] = integrate.simps(case_Fy,  x=case_t)
+                    W[ imotion,iphysic,igrid,iorder] = integrate.simps(case_Wint,x=case_t)
+
+
+
+iorder = 2
+order = 'p3'
+for imotion,motion in zip(range(len(case_motions)),case_motions):
+    for iphysic,physic in zip(range(len(case_physics)),case_physics):
+
+
+        #sndofs = np.zeros(len(case_grids))
+        #for igrid,grid in zip(range(len(case_grids)),case_grids):
+        #    # Tri
+        #    sndofs[igrid] = case_grid_sizes[igrid]*(case_order_integers[iorder]+1)**2.
+
+        #sndofs = np.zeros(len(case_grids))
+        #for igrid,grid in zip(range(len(case_grids)),case_grids):
+        #    sndofs[igrid] = case_grid_sizes[igrid]*(afrl_order_integers[iorder]+1)**2.
+
+        ##sndofs = [1., 2., 3., 4.]
+
+        sndofs = [40., 160., 640., 2560.]
+            
+        color = 'ro-'
+    
+        if (motion == 'M1'):
+            if (physic == 'ReInf'):
+                ax_M1_1.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M1_2.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M1_3.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re1000'):
+                ax_M1_4.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M1_5.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M1_6.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re10'):
+                ax_M1_7.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M1_8.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M1_9.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+        elif (motion == 'M2'):
+            if (physic == 'ReInf'):
+                ax_M2_1.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M2_2.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M2_3.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re1000'):
+                ax_M2_4.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M2_5.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M2_6.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re10'):
+                if order == 'p4':
+                    ax_M2_7.plot(sndofs[:-1],xI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M2_8.plot(sndofs[:-1],yI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M2_9.plot(sndofs[:-1],W[ imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                else:
+                    ax_M2_7.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M2_8.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M2_9.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+        elif (motion == 'M3'):
+            if (physic == 'ReInf'):
+                ax_M3_1.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M3_2.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M3_3.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re1000'):
+                if order == 'p4':
+                    ax_M3_4.plot(sndofs[:-1],xI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M3_5.plot(sndofs[:-1],yI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M3_6.plot(sndofs[:-1],W[ imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                else:
+                    ax_M3_4.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M3_5.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M3_6.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re10'):
+                if order == 'p1' or order == 'p2' or order == 'p4':
+                    ax_M3_7.plot(sndofs[:-1],xI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M3_8.plot(sndofs[:-1],yI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M3_9.plot(sndofs[:-1],W[ imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                else:
+                    ax_M3_7.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M3_8.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M3_9.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+        elif (motion == 'M4'):
+            if (physic == 'ReInf'):
+                ax_M4_1.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M4_2.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                ax_M4_3.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re1000'):
+                if order == 'p4':
+                    ax_M4_4.plot(sndofs[:-1],xI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M4_5.plot(sndofs[:-1],yI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M4_6.plot(sndofs[:-1],W[ imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                else:
+                    ax_M4_4.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M4_5.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M4_6.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+            elif (physic == 'Re10'):
+                if order == 'p4':
+                    ax_M4_7.plot(sndofs[:-2],xI[imotion,iphysic,:-2,iorder],color,linewidth=1.0,label=order)
+                    ax_M4_8.plot(sndofs[:-2],yI[imotion,iphysic,:-2,iorder],color,linewidth=1.0,label=order)
+                    ax_M4_9.plot(sndofs[:-2],W[ imotion,iphysic,:-2,iorder],color,linewidth=1.0,label=order)
+                elif order == 'p1' or order == 'p2':
+                    ax_M4_7.plot(sndofs[:-1],xI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M4_8.plot(sndofs[:-1],yI[imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                    ax_M4_9.plot(sndofs[:-1],W[ imotion,iphysic,:-1,iorder],color,linewidth=1.0,label=order)
+                else:
+                    ax_M4_7.plot(sndofs,xI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M4_8.plot(sndofs,yI[imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+                    ax_M4_9.plot(sndofs,W[ imotion,iphysic,:,iorder],color,linewidth=1.0,label='UCB P3')
+
+
+
+
+
+
+
+
+
 
 
 
@@ -515,44 +691,44 @@ ax_M3_8.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
 
 ax_M1_1.set_ylim((-0.1e-08,0.1e-08))
-ax_M1_2.set_ylim((-0.012,-0.011))
-ax_M1_3.set_ylim((-0.009,-0.008))
+ax_M1_2.set_ylim((-0.0118,-0.0116))
+ax_M1_3.set_ylim((-0.0088,-0.0086))
 ax_M1_4.set_ylim((-0.1e-08,0.1e-08))
-ax_M1_5.set_ylim((-0.014,-0.01))
-ax_M1_6.set_ylim((-0.009,-0.008))
+ax_M1_5.set_ylim((-0.0125,-0.0120))
+ax_M1_6.set_ylim((-0.0088,-0.008))
 ax_M1_7.set_ylim((-0.1e-08,0.1e-08))
-ax_M1_8.set_ylim((-0.015,-0.005))
-ax_M1_9.set_ylim((-0.012,-0.005))
+ax_M1_8.set_ylim((-0.014,-0.012))
+ax_M1_9.set_ylim((-0.01025,-0.010))
 
 ax_M2_1.set_ylim((-0.1e-8,0.1e-8))
 ax_M2_2.set_ylim((-0.1e-8,0.1e-8))
-ax_M2_3.set_ylim((-0.1e-8,0.1e-8))
+ax_M2_3.set_ylim((-0.1e-6,0.1e-6))
 ax_M2_4.set_ylim((-0.1e-8,0.1e-8))
 ax_M2_5.set_ylim((-0.1e-8,0.1e-8))
 ax_M2_6.set_ylim((-0.12,-0.1))
 ax_M2_7.set_ylim((-0.1e-8,0.1e-8))
 ax_M2_8.set_ylim((-0.1e-8,0.1e-8))
-ax_M2_9.set_ylim((-0.18,-0.17))
+ax_M2_9.set_ylim((-0.178,-0.174))
 
 ax_M3_1.set_ylim((-0.1e-08,0.1e-08))
 ax_M3_2.set_ylim((-0.1e-08,0.1e-08))
-ax_M3_3.set_ylim((-1.e-5,-2.e-4))
+ax_M3_3.set_ylim((-2.e-4,-1.e-5))
 ax_M3_4.set_ylim((-0.1e-08,0.1e-08))
 ax_M3_5.set_ylim((-0.1e-08,0.1e-08))
-ax_M3_6.set_ylim((-0.0006,-0.0003))
+ax_M3_6.set_ylim((-0.00044,-0.000425))
 ax_M3_7.set_ylim((-0.1e-08,0.1e-08))
 ax_M3_8.set_ylim((-0.1e-08,0.1e-08))
-ax_M3_9.set_ylim((-0.04,-0.03))
+ax_M3_9.set_ylim((-0.035,-0.0345))
 
 ax_M4_1.set_ylim((-0.006,-0.005))
 ax_M4_2.set_ylim((-0.010,-0.008))
 ax_M4_3.set_ylim((-0.006,-0.004))
 ax_M4_4.set_ylim((-0.006,-0.004))
 ax_M4_5.set_ylim((-0.009,-0.006))
-ax_M4_6.set_ylim((-0.130,-0.12))
+ax_M4_6.set_ylim((-0.1284,-0.128))
 ax_M4_7.set_ylim((-0.008,-0.004))
-ax_M4_8.set_ylim((-0.008,-0.004))
-ax_M4_9.set_ylim((-0.20,-0.12))
+ax_M4_8.set_ylim((-0.0065,-0.006))
+ax_M4_9.set_ylim((-0.17,-0.165))
 
 
 
