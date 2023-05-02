@@ -97,7 +97,7 @@ UM_motions    = ['M1', 'M2']
 
 for imotion,motion in zip(range(len(UM_motions)),UM_motions):
 
-    um_file = 'UM/Tri-'+motion+'-''h3-p3/naca3_TimeHist.txt'
+    um_file = 'UMnew/Tri-'+motion+'-''h3-p3/naca3_TimeHist.txt'
 
     # Load data
     if (os.path.isfile(um_file)):
