@@ -110,7 +110,7 @@ UM_m  = np.zeros((4,3))
 for imotion,motion in zip(range(len(UM_motions)),UM_motions):
     for iphysic,physic in zip(range(len(UM_physics)),UM_physics):
 
-        um_file = 'UM/Quad-'+motion+'-'+physic+'-h2-p4/cyl3_TimeHist.txt'
+        um_file = 'UMnew/Quad-'+motion+'-'+physic+'-h2-p4/cyl3_TimeHist.txt'
 
         # Load data
         if (os.path.isfile(um_file)):

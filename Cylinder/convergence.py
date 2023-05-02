@@ -92,7 +92,7 @@ for imotion,motion in zip(range(len(case_motions)),case_motions):
             for iorder,order in zip(range(len(case_orders)),case_orders):
                 for itime,time in zip(range(len(case_times)),case_times):
 
-                    case_file = 'UM/Quad-'+motion+'-'+physic+'-'+grid+'-'+order+'/'+time+'_TimeHist.txt'
+                    case_file = 'UMnew/Quad-'+motion+'-'+physic+'-'+grid+'-'+order+'/'+time+'_TimeHist.txt'
 
                     # Load data
                     if (os.path.isfile(case_file)):
